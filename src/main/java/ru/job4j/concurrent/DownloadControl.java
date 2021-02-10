@@ -27,8 +27,9 @@ public class DownloadControl implements Runnable {
                 long finish = new Date().getTime();
                 long result = (int) (finish - start);
                 if (result > speed) {
-                    System.out.println("was delayed");
-                    Thread.sleep(result - speed);
+                    long delay = result - speed;
+                    System.out.println("was delayed on " + delay);
+                    Thread.sleep(delay);
                 }
                 if (bytesRead == -1) {
                     break;
