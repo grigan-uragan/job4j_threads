@@ -42,8 +42,4 @@ public class SimpleBlockingQueue<T> {
             return value;
         }
     }
-
-    public synchronized int size() {
-        return queue.size();
-    }
 }
