@@ -8,8 +8,7 @@ public class ParallelSearch {
                     while (true) {
                         System.out.println(queue.poll());
                     }
-                }
-        , "Consumer");
+                }, "Consumer");
         consumer.setDaemon(true);
         consumer.start();
         Thread producer = new Thread(
@@ -22,8 +21,7 @@ public class ParallelSearch {
                             Thread.currentThread().interrupt();
                         }
                     }
-                }
-        , "Producer");
+                }, "Producer");
         producer.start();
         try {
             producer.join();
