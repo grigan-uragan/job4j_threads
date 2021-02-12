@@ -21,7 +21,7 @@ public class SingleLockListTest {
         second.join();
         Set<Integer> rsl = new TreeSet<>();
         list.iterator().forEachRemaining(rsl::add);
-        assertThat(rsl, is(Set.of(1,2)));
+        assertThat(rsl, is(Set.of(1, 2)));
     }
 
 }
