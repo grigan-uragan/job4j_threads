@@ -5,7 +5,7 @@ public class ParallelSearch {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
         Thread consumer = new Thread(
                 () -> {
-                    while (true) {
+                    while (!Thread.currentThread().isInterrupted()) {
                         try {
                             System.out.println(queue.poll());
                         } catch (InterruptedException e) {
@@ -13,7 +13,6 @@ public class ParallelSearch {
                         }
                     }
                 }, "Consumer");
-        consumer.setDaemon(true);
         consumer.start();
         Thread producer = new Thread(
                 () -> {
@@ -29,6 +28,8 @@ public class ParallelSearch {
         producer.start();
         try {
             producer.join();
+            consumer.interrupt();
+            consumer.join();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
