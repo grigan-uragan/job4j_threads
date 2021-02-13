@@ -3,30 +3,34 @@ package ru.job4j.concurrent;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @ThreadSafe
 public class PersonStorage {
     @GuardedBy("this")
-    private final List<Person> persons = new ArrayList<>();
+    private final Map<Integer, Person> persons = new HashMap<>();
 
     public synchronized boolean add(Person person) {
-        if (persons.contains(person)) {
-            return false;
+        boolean result = persons.containsKey(person.getId());
+        if (result) {
+            update(person);
+        } else {
+            persons.put(person.getId(), person);
         }
-        return persons.add(person);
+        return !result;
     }
 
     public synchronized boolean update(Person person) {
-        int index = persons.indexOf(person);
-        persons.set(index, person);
-        return index != -1;
+        boolean result = persons.containsKey(person.getId());
+        if (result) {
+            persons.replace(person.getId(), person);
+        }
+        return result;
     }
 
     public synchronized boolean delete(Person person) {
-        return persons.remove(person);
+        Person result = persons.remove(person.getId());
+        return result != null;
     }
 
     public synchronized void transfer(int idFrom, int idTo, int amount) {
@@ -37,11 +41,10 @@ public class PersonStorage {
     }
 
     private synchronized Person findById(int id) {
-        for (Person p : persons) {
-            if (p.getId() == id) {
-                return p;
-            }
+        Person result = persons.get(id);
+        if (result == null) {
+            throw new NoSuchElementException("Person with id=" + id + " not found");
         }
-        throw new NoSuchElementException("Person with id=" + id + " not found");
+        return result;
     }
 }
