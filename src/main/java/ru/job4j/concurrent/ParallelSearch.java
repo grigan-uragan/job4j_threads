@@ -6,7 +6,11 @@ public class ParallelSearch {
         Thread consumer = new Thread(
                 () -> {
                     while (true) {
-                        System.out.println(queue.poll());
+                        try {
+                            System.out.println(queue.poll());
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
                 }, "Consumer");
         consumer.setDaemon(true);
@@ -14,8 +18,8 @@ public class ParallelSearch {
         Thread producer = new Thread(
                 () -> {
                     for (int i = 0; i < 3; i++) {
-                        queue.offer(i);
                         try {
+                            queue.offer(i);
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
