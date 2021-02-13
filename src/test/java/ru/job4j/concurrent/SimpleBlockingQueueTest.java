@@ -20,14 +20,19 @@ public class SimpleBlockingQueueTest {
             }
         }, "Producer");
         Thread consumer = new Thread(() -> {
-            for (int i = 0; i < 10; i++) {
-                buffer.add(queue.poll());
-            }
+            while (!queue.isEmpty() || !Thread.currentThread().isInterrupted())
+                try {
+                    buffer.add(queue.poll());
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
         }, "Consumer");
         producer.start();
         consumer.start();
         try {
             producer.join();
+            consumer.interrupt();
             consumer.join();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

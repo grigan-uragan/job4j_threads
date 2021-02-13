@@ -11,35 +11,34 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private final Queue<T> queue = new LinkedList<>();
 
-    public void offer(T value) {
-        synchronized (this) {
-            while (!queue.isEmpty()) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+    public synchronized void offer(T value) {
+        while (!queue.isEmpty()) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            System.out.println(Thread.currentThread().getName() + " added " + value);
-                queue.offer(value);
-                this.notifyAll();
         }
-
+        System.out.println(Thread.currentThread().getName() + " added " + value);
+        queue.offer(value);
+        this.notifyAll();
     }
 
-    public T poll() {
-        synchronized (this) {
-            while (queue.isEmpty()) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+    public synchronized T poll() {
+        while (queue.isEmpty()) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-            T value = queue.poll();
-            System.out.println(Thread.currentThread().getName() + " get " + value);
-            notifyAll();
-            return value;
         }
+        T value = queue.poll();
+        System.out.println(Thread.currentThread().getName() + " get " + value);
+        notifyAll();
+        return value;
+    }
+
+    public synchronized boolean isEmpty() {
+        return queue.isEmpty();
     }
 }
