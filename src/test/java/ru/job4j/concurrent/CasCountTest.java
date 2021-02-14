@@ -11,7 +11,7 @@ public class CasCountTest {
     public void when10ThreadIncrementThenReturn10() throws InterruptedException {
         CasCount casCount = new CasCount(0);
         for (int i = 0; i < 10; i++) {
-           new Thread(casCount::increment,"#" + i).start();
+           new Thread(casCount::increment, "#" + i).start();
         }
 
         Thread.sleep(1000);
@@ -23,7 +23,7 @@ public class CasCountTest {
     public void when10000ThreadIncrementThenCount10000() throws InterruptedException {
         CasCount casCount = new CasCount(0);
         for (int i = 0; i < 10000; i++) {
-            new Thread(casCount::increment,"#" + i).start();
+            new Thread(casCount::increment, "#" + i).start();
         }
 
         Thread.sleep(5000);
