@@ -36,15 +36,21 @@ public class PersonStorage {
     public synchronized void transfer(int idFrom, int idTo, int amount) {
         Person from = findById(idFrom);
         Person to = findById(idTo);
-        from.setAmount(-amount);
-        to.setAmount(amount);
+        if (from != null && to != null) {
+            int balanceFrom = from.getAmount();
+            if (balanceFrom < amount) {
+                throw new IllegalStateException("insufficient funds");
+            }
+            int balanceTo = to.getAmount();
+            from.setAmount(balanceFrom - amount);
+            to.setAmount(balanceTo + amount);
+        }
+
     }
 
     private synchronized Person findById(int id) {
-        Person result = persons.get(id);
-        if (result == null) {
-            throw new NoSuchElementException("Person with id=" + id + " not found");
-        }
+        Person result;
+        result = persons.get(id);
         return result;
     }
 }

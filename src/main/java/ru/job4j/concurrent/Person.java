@@ -24,7 +24,7 @@ public class Person {
     }
 
     public void setAmount(int amount) {
-        this.amount += amount;
+        this.amount = amount;
     }
 
     @Override
