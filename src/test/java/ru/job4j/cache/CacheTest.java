@@ -48,6 +48,6 @@ public class CacheTest {
         Cache cache = new Cache();
         cache.add(first);
         first.setVersion(1);
-        cache.update(second);
+        assertThat(cache.update(second), is(false));
     }
 }
