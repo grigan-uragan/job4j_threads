@@ -46,7 +46,9 @@ public class ObjectSearch<T> {
                 + " Vestibulum eget aliquam nisl.";
         String[] strings = string.split("\\s");
         ObjectSearch<String> objectSearch = new ObjectSearch<>(strings);
-
+        ParallelObjectSearch<String> parallelSearch =
+                new ParallelObjectSearch<>(strings, "Fusce", 0, strings.length);
         System.out.println(objectSearch.getIndex("Fusce"));
+        System.out.println(parallelSearch.getIndex());
     }
 }
