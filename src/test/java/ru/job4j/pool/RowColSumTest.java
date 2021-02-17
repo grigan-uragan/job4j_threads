@@ -24,8 +24,6 @@ public class RowColSumTest {
         assertThat(sum, is(result));
     }
 
-
-
     @Test
     public void whenSequenceMatrix3By3ThenAsyncResultTrue() {
         RowColSum.Sums[] sum = RowColSum.asyncSum(matrix);
